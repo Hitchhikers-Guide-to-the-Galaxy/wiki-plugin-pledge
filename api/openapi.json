@@ -1,0 +1,58 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Pledge",
+    "version": "0.1.0",
+    "description": "A 42-second video pledge, kept on the pledger's own site. The browser records the take and puts it in the page's assets through the Farm plugin's upload; seal turns it into pledge.mp4, pledge.m4a and poster.jpg with ffmpeg on this farm (inside the pledge-seal scope on a Pi), hashes each, deletes the take and writes pledge.json, the pledge record. Signing comes later (Video Pledge Plan, Phase 3): the record leaves signatures empty."
+  },
+  "paths": {
+    "/pledger.json": {
+      "get": {
+        "operationId": "pledger",
+        "summary": "Who pledges here: this site, its owner and its fish",
+        "x-fedwiki-read-only": true,
+        "x-fedwiki-context": ["origin", "status"],
+        "responses": {
+          "200": { "description": "site, owner {name, id}, fish {src, sha256} or null, seconds (42) and the kinds a pledge may be." }
+        }
+      }
+    },
+    "/seal.json": {
+      "post": {
+        "operationId": "seal",
+        "summary": "Seal a recorded take into a pledge",
+        "description": "Reads assets/<slug>/<take>, writes pledge.mp4 (H.264 + AAC, at most 42 s, metadata stripped, faststart; streams copied when the take is already H.264 and AAC), pledge.m4a and poster.jpg beside it, deletes the take and writes pledge.json, which is also the answer. One seal at a time per farm.",
+        "x-fedwiki-writes": true,
+        "x-fedwiki-spends": true,
+        "x-fedwiki-context": ["origin", "status"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["slug", "take"],
+                "properties": {
+                  "slug": { "type": "string", "description": "The pledge page's slug; its asset folder holds the take." },
+                  "take": { "type": "string", "description": "The take's file name in that folder: take.mp4 or take.webm." },
+                  "title": { "type": "string", "description": "The pledge page's title, Pledge of <Name> <date>." },
+                  "name": { "type": "string", "description": "The pledger's name as they gave it; the site owner's name when empty." },
+                  "kind": { "type": "string", "description": "time, cash or sudota.", "default": "time" },
+                  "amount": { "type": "string", "description": "What is pledged, in words: 42 hours." },
+                  "prompt": { "type": "string", "description": "The words shown while recording." },
+                  "recorded_at": { "type": "string", "description": "When the take was kept, ISO 8601." },
+                  "duration": { "type": "number", "description": "The take's length as the browser measured it, seconds." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "pledge.json version 1: pledger {name, id, fish, site}, slug, recorded_at, duration, kind, amount, files {pledge.mp4, pledge.m4a, poster.jpg: src, bytes, sha256}, seal {seconds, encoder, cap}, words null, signatures []." },
+          "404": { "description": "No take in that folder." },
+          "409": { "description": "That folder already holds a sealed pledge." }
+        }
+      }
+    }
+  }
+}

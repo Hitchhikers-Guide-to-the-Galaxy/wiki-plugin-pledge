@@ -1,0 +1,97 @@
+{
+  "title": "About Pledge Plugin",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "20f88c16a774c811",
+      "text": "The **Pledge** plugin records a 42-second video pledge in the browser and keeps it on this site: the front camera with sound, a live preview, three-two-one, a ring that counts the seconds and stops itself, playback, then *Keep this pledge* or *Again*. Keeping seals the take on the farm with ffmpeg and writes the page *Pledge of Name date* with the video, its record and its hash."
+    },
+    {
+      "type": "markdown",
+      "id": "8e02dbd0e09ff47a",
+      "text": "# Item\n> Four commands, one per line; any other line is shown above the recorder."
+    },
+    {
+      "type": "markdown",
+      "id": "45cbe5e812311f73",
+      "text": "- **PLEDGE 42** the cap in seconds, at most 42\n- **KIND time** time, cash or sudota\n- **AMOUNT 42 hours** what is pledged, in words\n- **PROMPT** the words shown while recording"
+    },
+    {
+      "type": "pledge",
+      "id": "d98de064edc674a2",
+      "text": "PLEDGE 42\nKIND time\nAMOUNT 42 hours\nPROMPT I pledge forty-two hours of my time to the Hitchhikers, given in honour, in my own name."
+    },
+    {
+      "type": "markdown",
+      "id": "007befd85704d883",
+      "text": "# Seal\n> What the farm does with a take."
+    },
+    {
+      "type": "markdown",
+      "id": "d6cc55297de56f5f",
+      "text": "The take goes into `assets/<pledge-slug>/take.mp4` (or `.webm`) through the Farm plugin's upload, owner-gated like any write. Then `POST /system/api/pledge/seal.json` runs ffmpeg \u2014 inside the `pledge-seal` scope from the pi-travel kit on a Pi, capped at 512M with no swap \u2014 to write `pledge.mp4` (H.264 and AAC, at most 42 s, metadata stripped, faststart, streams copied when the take is already H.264 and AAC), `pledge.m4a` and `poster.jpg`, hashes each, deletes the take and writes `pledge.json`, the first pledge record: pledger, site, slug, time, length, kind, amount, files, empty words, no signatures yet. `GET /system/api/pledge/pledger.json` names the site's owner and fish."
+    },
+    {
+      "type": "markdown",
+      "id": "8a33c73e1eb50ad3",
+      "text": "# See\n- [[Video Pledge Plan]] \u2014 the plan this plugin is Phase 2 of\n- [[Make Your Pledge]] \u2014 the ceremony step that carries the item\n- [[About Audio Note Plugin]] \u2014 whose recorder this copies"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "About Pledge Plugin",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "20f88c16a774c811",
+            "text": "The **Pledge** plugin records a 42-second video pledge in the browser and keeps it on this site: the front camera with sound, a live preview, three-two-one, a ring that counts the seconds and stops itself, playback, then *Keep this pledge* or *Again*. Keeping seals the take on the farm with ffmpeg and writes the page *Pledge of Name date* with the video, its record and its hash."
+          },
+          {
+            "type": "markdown",
+            "id": "8e02dbd0e09ff47a",
+            "text": "# Item\n> Four commands, one per line; any other line is shown above the recorder."
+          },
+          {
+            "type": "markdown",
+            "id": "45cbe5e812311f73",
+            "text": "- **PLEDGE 42** the cap in seconds, at most 42\n- **KIND time** time, cash or sudota\n- **AMOUNT 42 hours** what is pledged, in words\n- **PROMPT** the words shown while recording"
+          },
+          {
+            "type": "pledge",
+            "id": "d98de064edc674a2",
+            "text": "PLEDGE 42\nKIND time\nAMOUNT 42 hours\nPROMPT I pledge forty-two hours of my time to the Hitchhikers, given in honour, in my own name."
+          },
+          {
+            "type": "markdown",
+            "id": "007befd85704d883",
+            "text": "# Seal\n> What the farm does with a take."
+          },
+          {
+            "type": "markdown",
+            "id": "d6cc55297de56f5f",
+            "text": "The take goes into `assets/<pledge-slug>/take.mp4` (or `.webm`) through the Farm plugin's upload, owner-gated like any write. Then `POST /system/api/pledge/seal.json` runs ffmpeg \u2014 inside the `pledge-seal` scope from the pi-travel kit on a Pi, capped at 512M with no swap \u2014 to write `pledge.mp4` (H.264 and AAC, at most 42 s, metadata stripped, faststart, streams copied when the take is already H.264 and AAC), `pledge.m4a` and `poster.jpg`, hashes each, deletes the take and writes `pledge.json`, the first pledge record: pledger, site, slug, time, length, kind, amount, files, empty words, no signatures yet. `GET /system/api/pledge/pledger.json` names the site's owner and fish."
+          },
+          {
+            "type": "markdown",
+            "id": "8a33c73e1eb50ad3",
+            "text": "# See\n- [[Video Pledge Plan]] \u2014 the plan this plugin is Phase 2 of\n- [[Make Your Pledge]] \u2014 the ceremony step that carries the item\n- [[About Audio Note Plugin]] \u2014 whose recorder this copies"
+          }
+        ]
+      },
+      "date": 1793558046650,
+      "provenance": "Authored by an AI agent \u2014 Claude Code via the [[fedwiki-create-plugin]] skill, Video Pledge Plan Phase 2. [https://claude.com/claude-code Claude Code]",
+      "meta": {
+        "v": 1,
+        "agent": {
+          "kind": "ai",
+          "name": "Claude Code",
+          "session": "67f0cdd7-a57d-4d80-82d5-128603d9650d"
+        },
+        "act": "create"
+      }
+    }
+  ],
+  "plugin": "pledge"
+}
